@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Palitan ang mga ito base sa iyong GCP Project
-PROJECT_ID="openvpn_mtk"
+PROJECT_ID="mtkovpn_gcp"
 SERVICE_NAME="dns-pointer"
 REGION="us-central1"
 
