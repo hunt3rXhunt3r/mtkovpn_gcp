@@ -1,17 +1,20 @@
 #!/bin/bash
 
-# Palitan ang mga ito base sa iyong GCP Project
-PROJECT_ID="mtkovpn_gcp"
-SERVICE_NAME="dns-pointer"
-REGION="us-central1"
+# 1. Siguraduhin na ang PROJECT_ID ay kukuha sa active account mo sa Cloud Shell
+# Para hindi mo na kailangang i-type manually.
+PROJECT_ID=$(gcloud config get-value project)
 
-# 1. I-build ang Docker image
-docker build -t gcr.io/$PROJECT_ID/$SERVICE_NAME .
+# 2. Ang SERVICE_NAME ay dapat walang underscore (_). Gagamit tayo ng hyphen (-).
+SERVICE_NAME="mtkovpn-gcp-dns"
+REGION="asia-southeast1"
 
-# 2. I-push sa Google Container Registry
-docker push gcr.io/$PROJECT_ID/$SERVICE_NAME
+echo "Deploying to Project: $PROJECT_ID"
 
-# 3. I-deploy sa Cloud Run
+# 1. I-build ang Docker image gamit ang Cloud Build (mas mabilis sa GCP)
+# Ito ay mas reliable kaysa sa 'docker build' sa loob ng Cloud Shell
+gcloud builds submit --tag gcr.io/$PROJECT_ID/$SERVICE_NAME
+
+# 2. I-deploy sa Cloud Run
 gcloud run deploy $SERVICE_NAME \
   --image gcr.io/$PROJECT_ID/$SERVICE_NAME \
   --platform managed \
