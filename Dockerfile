@@ -1,11 +1,16 @@
-FROM alpine:latest
-# Dito mo ilalagay ang IP o Domain na gagamitin ng proxy mo
-ENV SERVER_DOMAIN="iyong-dns-dito.com"
-ENV PORT=8080
+FROM nginx:alpine
+# I-set ang IP ng sarili mong server dito
+ENV MY_SERVER_IP="202.1xx.xxx.xx" 
+# I-configure ang Nginx para i-point ang traffic sa server mo
+RUN echo 'server { \
+    listen 8080; \
+    location / { \
+        proxy_pass http://'$MY_SERVER_IP':1194; \
+        proxy_http_version 1.1; \
+        proxy_set_header Upgrade $http_upgrade; \
+        proxy_set_header Connection "upgrade"; \
+    } \
+}' > /etc/nginx/conf.d/default.conf
 
-# (Dito ilalagay ang installation ng xray/v2ray)
-COPY config.json /etc/xray/config.json
-# Pwede mong gamitin ang 'sed' para palitan ang domain sa config.json habang nagbu-build
-RUN sed -i "s/MY_DOMAIN/$SERVER_DOMAIN/g" /etc/xray/config.json
-
-CMD xray run -c /etc/xray/config.json
+EXPOSE 8080
+CMD ["nginx", "-g", "daemon off;"]
