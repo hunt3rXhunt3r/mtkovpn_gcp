@@ -1,11 +1,11 @@
-# Gamit ang official at lightweight na CoreDNS image
-FROM coredns/coredns:latest
+FROM alpine:latest
+# Dito mo ilalagay ang IP o Domain na gagamitin ng proxy mo
+ENV SERVER_DOMAIN="iyong-dns-dito.com"
+ENV PORT=8080
 
-# I-copy ang config file sa loob ng container
-COPY Corefile /Corefile
+# (Dito ilalagay ang installation ng xray/v2ray)
+COPY config.json /etc/xray/config.json
+# Pwede mong gamitin ang 'sed' para palitan ang domain sa config.json habang nagbu-build
+RUN sed -i "s/MY_DOMAIN/$SERVER_DOMAIN/g" /etc/xray/config.json
 
-# Port 8080 ang default port para sa Google Cloud Run
-EXPOSE 8080
-
-# Command para patakbuhin ang DNS server
-ENTRYPOINT ["/coredns", "-conf", "/Corefile"]
+CMD xray run -c /etc/xray/config.json
