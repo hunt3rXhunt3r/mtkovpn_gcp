@@ -1,6 +1,6 @@
 .:8080 {
     template ANY ANY . {
-        answer "{{ .Name }} 60 IN A IP_NG_OVPN_SERVER_MO"
+        answer "{{ .Name }} 60 IN A 13.212.5.11"
     }
     log
     errors
