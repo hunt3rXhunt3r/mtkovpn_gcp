@@ -10,19 +10,18 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      # STEP 1: Dito natin ilalagay ang IP mo sa nginx.conf bago i-build
-      - name: Inject Server IP into nginx.conf
+      - name: Inject Server IP
+        # Hahanapin ang dead IP (167.172.69.123) at papalitan ng nasa Secrets
         run: |
-          sed -i "s/13.212.5.11/${{ secrets.MY_SERVER_IP }}/g" nginx.conf
+          sed -i "s/167.172.69.123/${{ secrets.MY_SERVER_IP }}/g" nginx.conf
 
       - name: Auth Google Cloud
         uses: google-github-actions/auth@v1
         with:
           credentials_json: ${{ secrets.GCP_SA_KEY }}
 
-      - name: Build and Push to Artifact Registry
+      - name: Build and Push
         run: |
-          # Tinanggal natin ang --build-arg dahil modified na ang nginx.conf mo sa Step 1
           docker build -t gcr.io/${{ secrets.GCP_PROJECT_ID }}/vpn-proxy .
           gcloud auth configure-docker --quiet
           docker push gcr.io/${{ secrets.GCP_PROJECT_ID }}/vpn-proxy
