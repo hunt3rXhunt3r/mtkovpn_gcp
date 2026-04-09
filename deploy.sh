@@ -18,6 +18,6 @@ gcloud builds submit --tag gcr.io/$PROJECT_ID/$SERVICE_NAME
 gcloud run deploy $SERVICE_NAME \
   --image gcr.io/$PROJECT_ID/$SERVICE_NAME \
   --platform managed \
-  --region $REGION \
+  --region us-central1 \
   --allow-unauthenticated \
   --port 8080
