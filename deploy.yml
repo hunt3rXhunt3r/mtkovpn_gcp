@@ -13,7 +13,7 @@ jobs:
       - name: Inject Server IP
         # Hahanapin ang dead IP (167.172.69.123) at papalitan ng nasa Secrets
         run: |
-          sed -i "s/167.172.69.123/${{ secrets.MY_SERVER_IP }}/g" nginx.conf
+          sed -i "s/13.212.5.11/${{ secrets.MY_SERVER_IP }}/g" nginx.conf
 
       - name: Auth Google Cloud
         uses: google-github-actions/auth@v1
