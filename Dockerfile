@@ -1,13 +1,12 @@
 FROM nginx:alpine
 
-# Pinapasa ang IP ng server mo habang nagbi-build
-ARG SERVER_IP
-ENV SERVER_IP=$SERVER_IP
+# Direkta nating ilalagay ang IP mo dito
+ENV SERVER_IP="13.212.5.11"
 
 # Copy ang custom configuration ng Nginx
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
-# Palitan ang placeholder sa config gamit ang totoong IP
+# Papalitan nito ang 'TARGET_IP' sa loob ng nginx.conf mo
 RUN sed -i "s/TARGET_IP/$SERVER_IP/g" /etc/nginx/conf.d/default.conf
 
 EXPOSE 8080
